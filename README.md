@@ -1,6 +1,6 @@
 # on writing code
 
-A collection of opinionated style guides and development principles, by Ryan Hartzfeld.
+A collection of opinionated style guides and development principles, compiled by Ryan Hartzfeld.
 
 Built for humans to read but optimized for LLM consumption. Rules are terse and scannable so they're cheap to include in an LLM's context window; deeper rationale lives in sibling `*.why.md` files so a reader (human or model) can dig in only when a rule needs to be defended, bent, or evaluated on its merits. See [code-style/\_index.md](./code-style/_index.md) for the mechanics of the split.
 
