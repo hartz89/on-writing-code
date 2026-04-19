@@ -130,9 +130,10 @@ Petal.displayName = 'Petal';
 
 ## Event Handlers
 
-`strength: strong`
+`strength: strong` · [rationale](./react.why.md#event-handlers)
 
-- Prefix with `handle` (e.g., `handleClick`, `handleSubmit`).
+- Props: `on*`. Local handlers: `handle*`. Canonical shape: `<Button onClick={handleClick} />`.
+- Use a specific verb (`increment`, `saveFlower`) when it describes the action better than `handle*`.
 - Inline handlers are fine for trivial one-liners.
 - See [Memoization](#memoization) for when to wrap with `useCallback`.
 
@@ -142,21 +143,57 @@ Petal.displayName = 'Petal';
 
 - `&&` for simple presence.
 - Ternary for if/else.
-- Extract a variable or subcomponent before nesting ternaries.
+- Prefer inlining conditionals in the return statement over hoisting them into intermediate variables. The JSX reads as a structural mirror of the output; pulling branches out into variables fragments that picture.
+- Extract a variable or subcomponent only when the inline form gets genuinely hard to scan (nested ternaries, long branches, repeated subtrees).
 
 ```tsx
-// good
-{
-  isOpen && <Petals />;
-}
-{
-  isOpen ? <Petals /> : <Bud />;
-}
+// good — inline, structure visible
+return (
+  <Card>
+    {isOpen ? <Petals /> : <Bud />}
+    {hasLabel && <Label>{label}</Label>}
+  </Card>
+);
 
-// avoid
+// avoid — nested ternary; extract instead
 {
   isOpen ? isBig ? <BigPetals /> : <SmallPetals /> : <Bud />;
 }
+```
+
+## JSX Colocation
+
+`strength: strong` · [rationale](./react.why.md#jsx-colocation)
+
+- Keep JSX in the component's `return` statement. Don't scatter `<Foo />` expressions into intermediate variables, helper functions, or hooks declared alongside the component.
+- A helper that returns JSX is a sub-component. If you're extracting one, name it, type its props, and export (or colocate) it as its own component rather than a `renderX()` function.
+- `renderSomething()` helpers, JSX assigned to `const header = <div>...</div>` at the top of a component body, and hooks that return `ReactNode` are all code smells — they usually indicate the component is doing too much and wants to be split.
+
+```tsx
+// good — JSX lives in the return; sub-pieces are real components
+const FlowerHeader: FC<{ name: string }> = ({ name }) => <h2>{name}</h2>;
+
+export const FlowerCard: FC<FlowerCardProps> = ({ flower }) => {
+  return (
+    <article>
+      <FlowerHeader name={flower.name} />
+      <Petals count={flower.petalCount} />
+    </article>
+  );
+};
+
+// avoid — JSX scattered outside the return
+export const FlowerCard: FC<FlowerCardProps> = ({ flower }) => {
+  const header = <h2>{flower.name}</h2>;
+  const renderPetals = () => <Petals count={flower.petalCount} />;
+
+  return (
+    <article>
+      {header}
+      {renderPetals()}
+    </article>
+  );
+};
 ```
 
 ## Lists

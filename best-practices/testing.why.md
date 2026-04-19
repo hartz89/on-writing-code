@@ -26,8 +26,12 @@ Types rule out entire classes of bugs before a test runs — wrong shapes, missi
 
 ### When to reach for each
 
-- **Static (TS)**: types, `unknown`, discriminated unions. Always.
-- **Unit**: pure functions, reducers, parsers, algorithms. Any time logic is isolable from I/O.
+- **Static (TS)**: types, `unknown`, discriminated unions. This layer is always on — it's the compiler doing work before any test runs, not a tier you choose to invest in per feature.
+- **Unit**: don't over-write these. Reach for them primarily around common utilities and pure-logic modules, where they earn their keep three ways:
+  - as executable documentation for the utility's contract,
+  - to cover edge cases that are unreasonable to provoke from an integration test,
+  - to isolate the point of failure fast when a wave of integration tests goes red pointing at the same shared helper.
+  - Otherwise, default to integration — integration tests already exercise most of the same code paths with better confidence-per-effort.
 - **Integration**: components rendering with real dependencies, API endpoints end-to-end within the process. The workhorse.
 - **E2E**: critical user flows against the deployed system. Slow, flaky; spend the budget where it actually matters.
 
@@ -124,19 +128,25 @@ Each `test` contains (or explicitly calls) its own setup. Drop into any test and
 
 ---
 
-## Prefer Setup Functions
+## Setup Functions
 
-**Rule:** Use factory functions for shared setup; reserve `beforeEach` for fixture isolation.
+**Rule:** Start inline; extract a setup function when inlining gets repetitive. Reserve `beforeEach` for fixture isolation.
 
 **Strength:** strong
 
 ### `beforeEach` hides dependencies
 
-A `beforeEach` block runs before every test in a `describe`, but you can't see it from the test itself. To understand what a test depends on, you have to scroll up — often across multiple levels of nesting — and trace every hook that applies. Factory functions make the dependency explicit: read the test top-down and see exactly what it sets up.
+A `beforeEach` block runs before every test in a `describe`, but you can't see it from the test itself. To understand what a test depends on, you have to scroll up — often across multiple levels of nesting — and trace every hook that applies. A setup function called explicitly makes the dependency visible: read the test top-down and see exactly what it sets up.
 
-### Factories are composable
+### Setup functions are composable
 
 `makeFlower({ phase: 'open' })` accepts arguments. You can build variants inline, test-by-test, without a cascade of `describe` blocks each specializing setup. Composition scales; hook-layering doesn't.
+
+### Don't extract prematurely, don't resist at scale
+
+A two-test file probably doesn't need a setup helper — inline construction is clearer. But as a suite grows, the same construction repeats and starts drowning the intent of each test. That's the moment to extract. The goal isn't "setup functions everywhere" or "always inline"; it's keeping the test body about the behavior under test, with construction out of the way.
+
+"Setup function" is the term to reach for — "factory" fits when you're producing domain objects (`makeFlower`), but plenty of useful setup isn't object-construction (mounting with providers, seeding a test DB, building a request context). Call it what it is.
 
 ### When `beforeEach` is appropriate
 

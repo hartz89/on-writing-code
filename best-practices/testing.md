@@ -60,8 +60,8 @@ expect(wrapper.instance().state.phase).toBe('open');
 
 `strength: strong` · [rationale](./testing.why.md#avoid-nesting)
 
-- Prefer flat `test` blocks.
-- One level of `describe` is usually enough.
+- Default to **no** `describe` blocks. Flat `test` at file root.
+- Reserve `describe` for two narrow cases: a module exporting several related functions, or a large integration suite with distinct behavior groups. Both are also mild code smells — frequent reaching usually means the subject-under-test is doing too much.
 
 ```ts
 // good — flat, explicit
@@ -78,22 +78,22 @@ test('advances from open to seed', () => {
 });
 ```
 
-## Prefer Setup Functions
-
-`strength: strong` · [rationale](./testing.why.md#prefer-setup-functions)
-
-- Prefer duplicated setup inline over shared `beforeEach` hooks.
-- When setup gets too repetitive to inline, extract a factory function: `makeFlower({ phase: 'bud' })`. Each test calls it explicitly.
-- Reserve `beforeEach` for fixture isolation (`jest.clearAllMocks()`, fake-timer resets), not for building domain objects.
-
 ## Test Structure
 
 `strength: strong` · [rationale](./testing.why.md#test-structure)
 
 - Arrange, act, assert: set up, invoke, check. Separate sections with blank lines, not comments.
-- Prefer fewer, longer tests that walk a realistic flow over many tiny tests that each verify one thing.
-- A long integration test is still one test if it exercises one user story — even with multiple act-assert beats.
+- Prefer **fewer, longer tests** that walk a realistic flow over many tiny tests that each verify one thing. A long integration test is still one test if it exercises one user story — even with several act-assert beats.
+- AAA is a shape, not a shackle: a single test may iterate arrange → act → assert multiple times as it drives a flow through successive states. Keep beats colocated in one test when they belong to the same story.
 - Split when two beats are exercising truly unrelated behaviors.
+
+## Setup Functions
+
+`strength: strong` · [rationale](./testing.why.md#setup-functions)
+
+- Start with setup inline. Duplication is fine until it hurts.
+- Extract a setup function (`makeFlower({ phase: 'bud' })`) when repetition drowns the test's intent. Each test calls it explicitly, overriding only what matters.
+- Reserve `beforeEach` for fixture isolation (`jest.clearAllMocks()`, fake-timer resets), not building domain objects.
 
 ## Naming
 

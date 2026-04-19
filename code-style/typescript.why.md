@@ -127,6 +127,96 @@ Structural tests (`'thorns' in flower`) work but don't scale — every new prope
 
 ---
 
+## Avoid `as` Casting
+
+**Rule:** Treat `as X` as a last resort. Prefer narrowing, type guards, or schema validation.
+
+**Strength:** strong
+
+### `as` silences the compiler without proving anything
+
+The type system is only as strong as its weakest link. Every `as` is a claim — "trust me, this is a `Flower`" — that the compiler cannot verify. One unjustified cast upstream poisons every downstream assumption that the type is accurate, and the failures surface at runtime instead of at compile time. That's the thing TypeScript is supposed to prevent.
+
+### Narrowing proves what `as` asserts
+
+`typeof`, `instanceof`, `in`, and user-defined guards prove the type to the compiler. A schema validator (Zod, Valibot) proves the type to the runtime _and_ the compiler. Both give you fully-typed access to the value without the trust gap. The cost of doing it right is usually a few lines; the cost of getting it wrong is a production bug traced back to a five-character cast.
+
+### The acceptable cases are narrow
+
+- **Post-validation handoff:** you've parsed a value with a schema at the boundary and are handing the result across an API that wants a nominal type. The cast is a formality; the proof happened one line up.
+- **`as const`:** a compile-time inference hint, not a type assertion. Different mechanism, different risks.
+- **Third-party type bugs:** the library's declared type is wrong and you can't fix upstream. Cast with a comment naming the library and the bug.
+
+Everything else — casting to silence an error, casting "because I know better," casting to fit a round peg in a square hole — is papering over a real problem.
+
+---
+
+## Strict Mode
+
+**Rule:** Enable `strict: true`. Don't disable individual strictness flags without justification.
+
+**Strength:** non-negotiable
+
+### Null-pointer errors are the most common avoidable bug
+
+`strictNullChecks` alone catches the largest class of runtime bugs TypeScript can prevent. Without it, every value that's actually `T | null | undefined` is typed as `T`, and the compiler lets you dereference it freely. You'll hit `Cannot read property of undefined` in production that a single tsconfig flag would have caught at compile time.
+
+### Strict is a package deal
+
+`strict: true` bundles `strictNullChecks`, `noImplicitAny`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `useUnknownInCatchVariables`, `alwaysStrict`, and `noImplicitThis`. Each of them closes a real gap. Turning one off usually means a specific codebase pattern is fighting the compiler — fix the pattern, not the flag.
+
+### Test files are the reasonable exception
+
+Test files lean heavily on partials (`{ name: 'test' } as User`) and mocks that don't need full type coverage. A separate `tsconfig.test.json` with `strict: false` or `strictNullChecks: false` relaxes the rules where rigor costs more than it gives — without weakening the production code's guarantees.
+
+---
+
+## Function Signatures
+
+**Rule:** Default to arrows; use `function` when hoisting helps; choose positional vs options by the function's shape.
+
+**Strength:** strong
+
+### Arrow functions are the consistent default
+
+At module scope, arrow-function expressions read the same whether the value is a function, an object, or a primitive: `const x = ...`. No mental toggle between declaration forms. They also compose naturally with `const`, `export const`, and point-free utility patterns.
+
+### `function` declarations earn their keep via hoisting
+
+Hoisting lets you write a file intent-first: the exported function at the top, supporting helpers below in the order they're called. The reader gets the summary before the details, and only parses the helpers when they need to. With `const` arrows, you either put helpers above the thing that uses them (implementation-before-intent) or accept a "`foo` is used before its declaration" error. Allowing `function` for local helpers is the pragmatic middle — defaults to arrow, reaches for `function` when it makes the file read better.
+
+### Shape of the parameter list follows shape of the function
+
+- **Multiple first-class inputs:** positional. `clamp(value, min, max)` reads naturally; `clamp({ value, min, max })` is needless ceremony.
+- **Primary + options:** one positional, one object. This is what most functions grow into — a main thing they operate on, and a set of modifiers. `fetchFlower(id, { includeSeeds })` keeps the important argument visible at the call site while letting configuration stay named.
+- **Boolean-typed parameters:** always named. `plant(id, true, false)` is unreadable at every call site forever; `plant(id, { fertilize: true, water: false })` tells the reader what it means.
+
+Over-using positional arguments on complex signatures makes call sites brittle and opaque. Over-using options objects on simple ones turns every call into pointless destructuring. Match the shape.
+
+---
+
+## Flatness and Extraction
+
+**Rule:** Keep code flat; extract helpers for complex conditional logic; reach for IIFEs when an expression needs statements.
+
+**Strength:** strong
+
+### Nesting is the best predictor of hard-to-change code
+
+Cyclomatic complexity, cognitive complexity, "how long does it take to understand this function" — they all correlate with indentation depth. Every level of nesting is another piece of state the reader has to carry ("we're in the branch where `x` is true, and also the branch where `y` is defined, and inside the loop over `z`..."). Flat code is scannable; deeply nested code has to be simulated line-by-line.
+
+### Extraction is the conditional-logic escape valve
+
+When a block's decision tree won't flatten — nested conditions, early-return patterns that don't fit the surrounding flow, multi-step validation — pull it into a named helper. The helper's name replaces the comment that would otherwise explain what the block does. The outer function shrinks back to a linear sequence of verbs. This is the highest-leverage refactor available in most codebases.
+
+### IIFEs are the immutability escape valve
+
+Sometimes producing a `const` value takes more than one line: a switch, a chain of guards, a try/catch. The temptation is `let result; if (...) result = ...; else result = ...;` — but a mutable binding with five assignment sites is harder to reason about than an immutable one computed by a local function.
+
+An IIFE — `const x = ((): T => { ... })()` — keeps the binding `const`, keeps the computation scoped to the expression, and doesn't leak temporaries into the surrounding function. It looks a little unusual the first time; it reads cleanly once you've seen the pattern. The alternative is either mutation or an unnecessary top-level helper called exactly once.
+
+---
+
 ## Enums
 
 **Rule:** Prefer string-literal unions or `as const` objects. Don't use `enum`.

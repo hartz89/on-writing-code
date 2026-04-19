@@ -150,6 +150,33 @@ const parseFlower = (raw: unknown): Flower => {
 const parseFlower = (raw: any): Flower => raw;
 ```
 
+## Avoid `as` Casting
+
+`strength: strong` · [rationale](./typescript.why.md#avoid-as-casting)
+
+- Treat `as X` as a last resort. Prefer narrowing, type guards, schema validation, or fixing the upstream type.
+- Acceptable with a justifying comment: post-validation handoffs, `as const`, bridging incorrect third-party types.
+- Never use `as` to silence an error.
+
+```ts
+// good — narrow, use naturally
+if (isFlower(raw)) raw.phase;
+
+// acceptable — schema validated, cast to nominal type
+const data = FlowerSchema.parse(raw);
+return data as ParsedFlower;
+
+// avoid
+const flower = getFlower() as Flower;
+```
+
+## Strict Mode
+
+`strength: non-negotiable` · [rationale](./typescript.why.md#strict-mode)
+
+- Enable `strict: true`. Don't disable individual strictness flags without a justifying comment.
+- Relaxed strictness is acceptable in test/mock files via a separate `tsconfig.test.json`.
+
 ## Type Narrowing
 
 `strength: strong`
@@ -184,14 +211,15 @@ type WeirdFlower = Omit<Partial<Pick<Flower, keyof Rose>>, 'thorns'>;
 
 `strength: strong`
 
-- Use descriptive names in public APIs; single letters OK in tight local helpers.
-- Constrain generics — an unconstrained `T` is usually too loose.
+- Prefix generic names with `T` in public APIs: `TItem`, `TKey`, `TValue`. It marks them as type parameters at a glance and keeps them from colliding with concrete types sharing the same conceptual name.
+- Bare `T` is fine for tight local helpers where there's only one type parameter and the context is obvious.
+- Constrain generics — an unconstrained `TItem` is usually too loose.
 
 ```ts
-export const pluck = <Item, Key extends keyof Item>(
-  items: readonly Item[],
-  key: Key
-): Item[Key][] => items.map((item) => item[key]);
+export const pluck = <TItem, TKey extends keyof TItem>(
+  items: readonly TItem[],
+  key: TKey
+): TItem[TKey][] => items.map((item) => item[key]);
 
 const first = <T>(items: readonly T[]): T | undefined => items[0];
 ```
@@ -231,10 +259,14 @@ const name = flower?.name ?? 'unknown';
 
 ## Function Signatures
 
-`strength: strong`
+`strength: strong` · [rationale](./typescript.why.md#function-signatures)
 
-- Prefer arrow functions at module scope.
-- Short parameter lists. At 3+ params, switch to an options object.
+- Default to arrow functions at module scope.
+- Use `function` declarations when hoisting helps (intent-first at the top, helpers below).
+- Parameter shape:
+  - One or two first-class inputs: positional (`clamp(value, min, max)`).
+  - Primary + config: positional primary, options object (`fetchFlower(id, { includeSeeds: true })`).
+  - 3+ first-class inputs, or any boolean param: single options object.
 - Return early; avoid deep nesting.
 
 ```ts
@@ -251,6 +283,53 @@ export const plant = (id: string, options: PlantOptions = {}): Flower => {
   }
   // ... happy path
 };
+
+export const clamp = (value: number, min: number, max: number): number =>
+  Math.min(Math.max(value, min), max);
+
+// function declaration hoisted for top-down readability
+export const renderRow = (flower: Flower): Row => ({
+  name: formatName(flower),
+  phase: formatPhase(flower.phase),
+});
+
+function formatName(flower: Flower): string {
+  /* ... */
+}
+function formatPhase(phase: Phase): string {
+  /* ... */
+}
+```
+
+## Flatness and Extraction
+
+`strength: strong` · [rationale](./typescript.why.md#flatness-and-extraction)
+
+- Keep code flat. Extract a helper with a descriptive name when a block's logic gets gnarly.
+- For expressions that need statements, reach for an IIFE — keeps the binding `const`, keeps computation local.
+
+```ts
+// good — extracted helper
+const displayName = pickDisplayName(flower, viewer);
+
+// good — IIFE for a multi-step const
+const label = ((): string => {
+  if (flower.phase === 'seed') return 'dormant';
+  if (flower.waterLevel < 3) return 'thirsty';
+  return flower.name;
+})();
+
+// avoid — nested conditionals with a mutable accumulator
+let label: string;
+if (flower.phase === 'seed') {
+  label = 'dormant';
+} else {
+  if (flower.waterLevel < 3) {
+    label = 'thirsty';
+  } else {
+    label = flower.name;
+  }
+}
 ```
 
 ## Iteration

@@ -8,6 +8,11 @@ A collection of markdown style guides and development principles. There is no bu
 
 Code _formatting_ (indentation, quotes, semicolons, trailing commas) is deliberately out of scope — delegated to Prettier / Biome / ESLint. Don't add formatting rules here; if a contributor proposes one, redirect them to their linter config.
 
+## How the user works
+
+- Feedback may arrive stream-of-consciousness, not in a pre-organized outline.
+- **Pushback is welcomed, within reason.** If feedback duplicates existing content or conflicts with a rule in the repo, say so and point to where. Silent agreement is the wrong move.
+
 ## Structure
 
 ```
@@ -16,11 +21,13 @@ code-gardening.md                # human-facing manifesto (not part of the LLM r
 philosophy.md                    # language-agnostic principles
 inspiration.md                   # attribution / further reading
 code-style/
-  _index.md                      # pattern docs + strength-level definitions + guide status
+  _index.md                      # strength-level definitions + guide status
   typescript.md                  # rules
   typescript.why.md              # rationale
   react.md                       # rules
   react.why.md                   # rationale
+  css.md                         # general CSS rules (tool-agnostic)
+  css.why.md                     # rationale
   vanilla-extract-css.md         # rules
   vanilla-extract-css.why.md     # rationale
 best-practices/
@@ -30,17 +37,6 @@ best-practices/
   testing.md                     # rules
   testing.why.md                 # rationale
 ```
-
-## The rule / rationale split
-
-Every `<lang>.md` rules file has an optional `<lang>.why.md` sibling for the non-obvious reasoning. This exists because:
-
-- Rules files are the primary artifact an LLM will consume — keeping them terse saves context.
-- Rationale is valuable but cheap to skip when not needed. Split it out.
-
-Add a why section **only when the rationale is non-obvious, contested, or worth defending**. Self-explanatory rules (naming, key-from-data, handler prefix) don't need one. Over-documentation is a real failure mode here.
-
-Section names in the why file mirror section names in the rules file so anchor links work (`./typescript.why.md#types-vs-interfaces`).
 
 ## Strength levels
 
@@ -52,59 +48,83 @@ Every rule section is tagged with one of:
 
 Canonical definitions: [code-style/\_index.md](./code-style/_index.md). Canonical example: [code-style/typescript.md](./code-style/typescript.md).
 
-## Voice and tone
+## The rule / rationale split
 
-- Inspired by _Clean Code_ (naming, small units, SRP) and Kent C. Dodds (simplest thing that works; avoid hasty abstractions).
-- Terse. Rules as bullets. Examples as code blocks. No marketing prose.
-- Show, don't tell — examples first, rules annotating them.
-- No trailing summaries, no restating what the diff did.
+Rules files are the hot path — pulled into context when an LLM writes code. `.why` files are cold — read only when an edge case, pushback, or design decision needs the reasoning. Keep the hot path thin: prose in a rules file is context every consumer pays for, forever; prose in a `.why` file is opt-in.
 
-## When adding a new guide or rule
+### What belongs in each file
 
-1. Write the rule as a concise bullet or sentence. Add a strength tag.
-2. Add a code example if the rule is structural.
-3. Only add a why section if the reasoning is non-obvious.
-4. If you add a why section, link to it from the rules file: `[rationale](./<lang>.why.md#section-anchor)`.
-5. Update [code-style/\_index.md](./code-style/_index.md) status table if creating a new guide.
+**Rules file (`<lang>.md`):**
 
-## Citation convention
+- A strength tag.
+- The rule, as a bullet or a short sentence. No paragraphs.
+- A code example when the rule is structural.
+- An anchor link to the `.why` file when rationale exists.
 
-Two patterns for linking to source material:
+That's it. If you find yourself writing "because…", "the argument is…", "this matters when…", "consider that…" — stop. That sentence belongs in the `.why` file.
 
-- **"Adapted from [...]" at the top of a why section** (under the `**Strength:**` line) when the whole rationale is directly derived from a named source. See [best-practices/testing.why.md](./best-practices/testing.why.md) for examples.
-- **Inline link within prose** when a specific sentence references a specific source. Use this when the source strengthens one claim rather than anchoring the whole section.
+**`.why` file (`<lang>.why.md`):**
 
-Don't add citations where there's no specific source — community-derived synthesis stands on its own. Forcing "further reading" onto every section clutters the files without adding signal.
+- The rule restated in one sentence.
+- The strength.
+- The reasoning — history, tradeoffs, counter-arguments, examples of what goes wrong without the rule. Paragraphs are fine here.
 
-[inspiration.md](./inspiration.md) at the repo root remains the lean browsable index of shaping influences (books, foundational essays, practitioners). It complements inline citations; it doesn't duplicate them.
+### When rationale is worth writing
 
-## When not to add rationale
+Add a rationale section only when the reasoning is non-obvious, contested, or worth defending. Skip it when:
 
 - The rule restates a language-level behavior (e.g., "keys should be unique").
 - The reason is "convention" and no reasonable reader would contest it.
 - You're explaining _what_ the rule does instead of _why_ it exists.
 
-If the why is already obvious from the rule, skip it.
+Over-documentation is a real failure mode here.
+
+### Drift signals
+
+A rules file that's grown prose paragraphs, multi-sentence bullets, or parenthetical justifications has drifted. When you notice it — in a diff you're writing, or a file you're editing — pull the prose into the `.why` file and leave the rules file with bullets and examples.
+
+### Structural parity
+
+Treat the rules file and its `.why.md` sibling as two views of one document. Section names and ordering must mirror — anchor links depend on it.
+
+When you rename, add, or remove a section:
+
+1. Do it in both files in the same commit.
+2. Update every anchor link pointing at the old section. Search the repo first — links can come from anywhere.
+3. If removing, remove the rule _and_ the rationale, not just one.
 
 ## Evolving the guide
 
-This repo grows conversationally — the user often adds opinions stream-of-consciousness and may revisit ground that's partially covered. Bring judgment to the rhythm:
+### Adding a rule within an existing guide
 
-- **Push back when something is already covered.** If new feedback restates an existing rule or rationale, say so and point to where. Don't silently add duplicative content; the user has explicitly asked for this pushback.
-- **Refactor freely.** Merge, split, rename, or rearrange sections when the shape of the content calls for it — don't treat the existing layout as load-bearing. Call out the restructuring in your response so it can be vetoed if wrong.
-- **Don't over-document.** Obvious, self-explanatory, uncontested rules don't need a rationale section or an inline citation. If you catch yourself writing "this is because… well, it's obvious," drop the prose.
-- **Ask on design questions; proceed on minor ones.** A genuine decision ("strong or weak?", "where does this section live?") is worth a single clarifying exchange. A wording tweak isn't.
+1. Write the rule as a concise bullet; add a strength tag.
+2. Add a code example if the rule is structural.
+3. Decide on rationale per ["When rationale is worth writing"](#when-rationale-is-worth-writing); if yes, add the mirroring section in the `.why` file and link to it.
 
-## Agentic defaults
+### Adding, renaming, or removing a whole guide
 
-- Prefer editing existing files over creating new ones.
-- Never write a trailing "summary" paragraph that restates changes. The diff speaks.
-- When a decision is ambiguous (e.g., should this be `strong` or `weak`?), ask rather than guess.
-- Match the voice of neighboring content. If in doubt, re-read `code-style/typescript.md` — that's the canonical example.
+A stale index sends readers to files that don't exist. Update all of these in the same commit:
 
-## Markdown conventions
+- `code-style/_index.md` or `best-practices/_index.md` — status table.
+- [README.md](./README.md) — "For LLM Consumers" and Structure sections.
+- The Structure tree in this file.
+- Any cross-guide pointers (e.g., `vanilla-extract-css.md` links to `css.md`).
 
-- 2-space indent, LF line endings, UTF-8, max 100 cols (see `.editorconfig`).
-- Headings in sentence case except for proper nouns and code identifiers.
-- Fenced code blocks with a language tag (`ts`, `tsx`, `md`).
-- Internal links are relative paths: `./typescript.why.md#...`.
+### Restructuring an existing guide
+
+Refactor freely — don't treat the existing layout as load-bearing. Call out the restructuring so it can be vetoed. Apply structural parity above: restructuring a rules file means restructuring the `.why` file too.
+
+## Citation convention
+
+- **"Adapted from [...]" at the top of a rationale section** (under `**Strength:**`) when the whole rationale derives from one named source. See [best-practices/testing.why.md](./best-practices/testing.why.md).
+- **Inline link** when a specific sentence references a specific source.
+
+Don't force citations where there's no specific source — community-derived synthesis stands on its own. [inspiration.md](./inspiration.md) is the browsable index of shaping influences; it complements inline citations, doesn't duplicate them.
+
+## Writing style
+
+- Terse. Rules as bullets, examples as code blocks, no marketing prose.
+- Show, don't tell — examples first, rules annotating them.
+- Match neighboring voice. Canonical example: `code-style/typescript.md`.
+- Prefer editing existing files over creating new ones. No trailing "summary" paragraph — the diff speaks.
+- Sentence-case headings (except proper nouns and code identifiers). Fenced code blocks with a language tag. Relative internal links (`./typescript.why.md#...`). Other formatting: see `.editorconfig`.

@@ -2,6 +2,8 @@
 
 Zero-runtime CSS-in-TS. Styles live in `.css.ts` files colocated with their component.
 
+Rules here cover Vanilla-Extract-specific concerns (`style` arrays, variants vs. recipes, themes, sprinkles). General CSS rules — logical properties, units, specificity, user preferences — live in [css.md](./css.md) and apply here too.
+
 Rationale for the opinionated sections lives in [vanilla-extract-css.why.md](./vanilla-extract-css.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [\_index.md](./_index.md).
 
 ## File Structure

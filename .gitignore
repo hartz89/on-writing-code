@@ -1,1 +1,15 @@
+# dependencies
 node_modules/
+
+# OS artifacts
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# logs and local env
+*.log
+
+# local scratch
+.cache/
+tmp/

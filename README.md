@@ -28,6 +28,7 @@ These guides are structured for lazy loading — don't read the whole repo, read
 | ------------------------------ | ------------------------------------------------------------------------ |
 | Writing TypeScript             | [code-style/typescript.md](./code-style/typescript.md)                   |
 | Writing React                  | [code-style/react.md](./code-style/react.md)                             |
+| Writing CSS (any tool)         | [code-style/css.md](./code-style/css.md)                                 |
 | Writing Vanilla Extract styles | [code-style/vanilla-extract-css.md](./code-style/vanilla-extract-css.md) |
 | Writing tests                  | [best-practices/testing.md](./best-practices/testing.md)                 |
 | Refactoring                    | [best-practices/refactoring.md](./best-practices/refactoring.md)         |
