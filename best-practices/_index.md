@@ -4,7 +4,8 @@ Process, workflow, testing, and operational practices. Rules files follow the sa
 
 ## Available Guides
 
-| Guide       | Rules                              | Rationale                                  | Status   |
-| ----------- | ---------------------------------- | ------------------------------------------ | -------- |
-| Refactoring | [refactoring.md](./refactoring.md) | [refactoring.why.md](./refactoring.why.md) | Complete |
-| Testing     | [testing.md](./testing.md)         | [testing.why.md](./testing.why.md)         | Complete |
+| Guide                 | Rules                                                  | Rationale                                                      | Status   |
+| --------------------- | ------------------------------------------------------ | -------------------------------------------------------------- | -------- |
+| Architecting Features | [architecting-features.md](./architecting-features.md) | [architecting-features.why.md](./architecting-features.why.md) | Complete |
+| Refactoring           | [refactoring.md](./refactoring.md)                     | [refactoring.why.md](./refactoring.why.md)                     | Complete |
+| Testing               | [testing.md](./testing.md)                             | [testing.why.md](./testing.why.md)                             | Complete |

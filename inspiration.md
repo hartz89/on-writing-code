@@ -6,6 +6,7 @@ Few of the opinions in this repo are original. This page collects the source mat
 
 - **_Clean Code_**, Robert C. Martin. Meaningful names, small functions, single responsibility, comments as a failure to express yourself in code.
 - **_On Writing_**, Stephen King. Nothing at all to do with code, inspired the repository name.
+- **_The Pragmatic Programmer_**, Hunt & Thomas. Tracer bullets, broken windows, DRY, orthogonality — the practitioner's handbook.
 
 ## Martin Fowler
 

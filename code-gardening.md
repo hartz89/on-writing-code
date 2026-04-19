@@ -6,9 +6,17 @@ Software isn't a static structure; it's a living ecosystem. The "building" metap
 
 A plant is only as healthy as the soil it grows in. In a codebase, your "soil" is your infrastructure, CI/CD pipelines, and core architectural patterns. If the environment is depleted—meaning brittle tests, inconsistent DX, or poor documentation—even the best features will eventually rot. Invest in the soil so that everything else has a chance to thrive.
 
-### Pruning is Mandatory
+### Weeding is Mandatory
 
-A garden left alone quickly becomes a thicket. In software, "weeds" are technical debt, dead code, and outdated dependencies. Pruning isn't a sign that something went wrong; it’s a requirement for the system to survive. You have to be disciplined about cutting back what no longer serves the codebase to make room for new growth.
+A garden left alone quickly becomes a thicket. In software, "weeds" are the things that actively harm the codebase: technical debt, dead code, outdated dependencies, and broken windows. Weeding isn’t a sign that something went wrong; it’s a requirement for the system to survive.
+
+The harder problem is compounding decay. A broken window left unfixed signals that decay is acceptable — and that signal spreads. One ignored `TODO`, one commented-out block, one dependency three major versions behind, and the team stops noticing. If you can’t fix a broken window immediately, ticket it or quarantine it so the decay doesn’t normalize.
+
+### Pruning is Important
+
+Weeding is reactive — it removes what’s broken or rotting. Pruning is proactive — it cuts back what’s healthy but overgrown: unused feature flags, kept-just-in-case abstractions, safety nets no one is tripping anymore.
+
+Left to accumulate, overgrowth costs the same as weeds: slower reads, higher cognitive load, more code to change when the system shifts. Prune before it hardens into load-bearing complexity.
 
 ### Intentional Cultivation
 
