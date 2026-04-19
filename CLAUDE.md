@@ -32,6 +32,8 @@ code-style/
   vanilla-extract-css.why.md     # rationale
 best-practices/
   _index.md                      # guide status
+  architecting-features.md       # rules
+  architecting-features.why.md   # rationale
   refactoring.md                 # rules
   refactoring.why.md             # rationale
   testing.md                     # rules

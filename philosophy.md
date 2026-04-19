@@ -14,6 +14,18 @@ Duplicate before you abstract. Two copies of similar code is cheaper than one wr
 
 The failure mode is the abstraction that fits two cases perfectly and fights the third. You end up with conditional flags, optional parameters, and "just for this case" branches — the abstraction costs more than the duplication it replaced.
 
+For the related question of duplicated _knowledge_ rather than duplicated syntax, see [Single Source of Truth](#single-source-of-truth).
+
+## Single Source of Truth
+
+Every piece of domain knowledge — a schema, a constant, a business rule, a validation — has one authoritative representation. When it changes, it changes in exactly one place.
+
+The distinction from AHA: AHA governs syntactic duplication — code that happens to look similar. SSoT governs semantic duplication — a single piece of knowledge expressed in multiple places. Two structurally similar reducers are fine; two copies of the same validation rule are not.
+
+What SSoT rules out: the same enum defined in three files, a magic number repeated across UI and API, business logic split between client and server validation that can drift.
+
+What SSoT does not rule out: two similar-looking reducer cases, two API handlers with similar shape, two React components that happen to render the same DOM. Similar structure is not shared knowledge.
+
 ## Don't Solve Problems You Don't Have
 
 A specific target within YAGNI: invented problems. _"What if we need to swap databases?" "What if we scale 10x?" "What if we go multi-region?"_ If none of those are on the horizon, the abstraction you build for them is speculation — and most speculation is wrong.
@@ -51,6 +63,14 @@ Organizing by "kind" (all styles in `styles/`, all tests in `tests/`) optimizes 
 Colocation scales down too: a helper used only by one module belongs in that module, not in a shared `utils/`. Promote to a shared location only when it has a real second caller.
 
 When you do promote, put the shared code in a `common/` (or `shared/`) directory at the closest scope that makes sense. A helper used by three files inside `features/checkout/` belongs in `features/checkout/common/`, not a top-level `utils/`. Reserve top-level shared directories for code genuinely used across features — not code that's merely reusable in principle.
+
+## Separate Things That Change Independently
+
+The other side of the colocation axis: things that change for different reasons should not be fused. Changing one concern shouldn't require an edit in another.
+
+Test for coupling: when one concern changes, does an unrelated concern need to change with it? If yes, they were fused, not adjacent.
+
+In practice: hooks return data and components render it; schema validation lives at boundaries; side effects are pushed to the edges. When you pull these apart, each piece can change without touching the others.
 
 ## Make Illegal States Unrepresentable
 
