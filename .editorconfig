@@ -1,0 +1,25 @@
+# EditorConfig helps maintain consistent coding styles across different editors and IDEs
+# https://editorconfig.org
+
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 100
+
+# Code files: 2 space indentation
+[*.{js,jsx,ts,tsx,mjs,cjs,json,css,scss,less,yaml,yml,html,xml}]
+indent_style = space
+indent_size = 2
+
+# Markdown: preserve whitespace
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefiles must use tabs
+[Makefile]
+indent_style = tab
