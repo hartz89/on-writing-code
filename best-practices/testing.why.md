@@ -75,6 +75,49 @@ Ask: "if I refactor this to a different implementation that does the same thing,
 
 ---
 
+## Query as the User Perceives
+
+**Rule:** Query the DOM the way a user perceives it, following [Testing Library's query priority](https://testing-library.com/docs/queries/about#priority).
+
+Adapted from [Testing Library — About Queries](https://testing-library.com/docs/queries/about) and the [React Testing Library cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet).
+
+### Queries double as an accessibility contract
+
+A test that finds a button by role and accessible name is also asserting that the button is reachable by a screen reader, a keyboard user, and an automated a11y audit. The query is doing two jobs at once. `getByTestId` does neither — it just finds an element. Choosing role-first queries gets a free a11y check for every interactive element you test.
+
+### The priority order isn't arbitrary
+
+Testing Library ranks queries by how closely they match real-user perception:
+
+1. **Role + name** — what assistive tech and most users perceive ("the Save button").
+2. **Label / placeholder / text** — what a sighted user reads on the page.
+3. **Alt / title** — fallbacks for elements without text content.
+4. **TestId** — invisible to every user; a developer-only hook.
+
+Walk down the list until something matches. Reaching the bottom is a signal: either the markup lacks affordances real users need, or the test is asserting on plumbing.
+
+### `*ByTestId` is an escape hatch
+
+Some things genuinely have no role, label, or text — a non-interactive container, a chart canvas, a third-party widget you can't restructure. Test ids exist for those. If `data-testid` is sprinkled across normal buttons, headings, and form fields, the markup is the problem; fix it before reaching for the escape hatch.
+
+### `getBy` / `queryBy` / `findBy` aren't interchangeable
+
+Each variant encodes a different assertion intent:
+
+- **`getBy*`** throws when the element is missing. Use it to assert presence — the throw becomes the failure with a useful message.
+- **`queryBy*`** returns `null` when missing. Use it (and only it) to assert absence: `expect(queryBy...).not.toBeInTheDocument()`. Reaching for `getBy` here gives a confusing failure — the query throws before the matcher ever runs, so you see "unable to find element" instead of "expected absent."
+- **`findBy*`** retries until the element appears or times out. Use it for anything that arrives asynchronously — after a fetch, a transition, an effect.
+
+Picking the wrong variant works _most_ of the time, then fails with a misleading message at the worst moment. Pick by intent.
+
+### `userEvent` over `fireEvent`
+
+`fireEvent.click(button)` dispatches a single synthetic `click`. A real click also fires `pointerdown`, `mousedown`, `focus`, `pointerup`, `mouseup`, `click` — and produces no event on a `disabled` button. `userEvent.click` simulates the full sequence and respects disabled state, focusability, and form semantics. Tests written with `fireEvent` can pass against components real users can't actually use.
+
+`fireEvent` is still the right tool for cases without a user-facing analogue: firing a `change` on a hidden input during a non-standard flow, dispatching a custom event. Reach for it deliberately, not by default.
+
+---
+
 ## Mock at the Furthest Reasonable Boundary
 
 **Rule:** Mock as far toward the edge of your code as you reasonably can.
@@ -118,6 +161,26 @@ Each `test` contains (or explicitly calls) its own setup. Drop into any test and
 
 ---
 
+## Test Structure
+
+**Rule:** AAA (arrange, act, assert) is the default shape. Prefer fewer, longer tests over many tiny ones.
+
+Adapted from [Kent C. Dodds, _Write Fewer, Longer Tests_](https://kentcdodds.com/blog/write-fewer-longer-tests).
+
+### One assertion per test is a unit-test convention that doesn't translate
+
+The "one assert per test" rule comes from unit testing, where each test verifies one pure-function invariant. It doesn't fit integration tests that simulate user flows. An integration test that clicks through three steps and checks state at each step isn't three tests — it's one test exercising one journey.
+
+### Smaller tests cost more to maintain
+
+Splitting a flow into many tests means duplicating setup (or maintaining brittle shared setup), repeating assertions about intermediate state, and writing more test names. The multiplier hurts readability and runtime without a proportional gain in diagnosis quality.
+
+### Split on unrelated behaviors, not on assertion count
+
+If two branches of the same test are exercising different features, split them. If they're exercising different beats of the same feature, keep them together.
+
+---
+
 ## Setup Functions
 
 **Rule:** Start inline; extract a setup function when inlining gets repetitive. Reserve `beforeEach` for fixture isolation.
@@ -139,23 +202,3 @@ A two-test file probably doesn't need a setup helper — inline construction is 
 ### When `beforeEach` is appropriate
 
 For _teardown_ and _fixture reset_: clearing mocks, closing connections, resetting fake timers. These are isolation concerns every test needs, and they don't carry meaningful state that should be visible to the test body.
-
----
-
-## Test Structure
-
-**Rule:** AAA (arrange, act, assert) is the default shape. Prefer fewer, longer tests over many tiny ones.
-
-Adapted from [Kent C. Dodds, _Write Fewer, Longer Tests_](https://kentcdodds.com/blog/write-fewer-longer-tests).
-
-### One assertion per test is a unit-test convention that doesn't translate
-
-The "one assert per test" rule comes from unit testing, where each test verifies one pure-function invariant. It doesn't fit integration tests that simulate user flows. An integration test that clicks through three steps and checks state at each step isn't three tests — it's one test exercising one journey.
-
-### Smaller tests cost more to maintain
-
-Splitting a flow into many tests means duplicating setup (or maintaining brittle shared setup), repeating assertions about intermediate state, and writing more test names. The multiplier hurts readability and runtime without a proportional gain in diagnosis quality.
-
-### Split on unrelated behaviors, not on assertion count
-
-If two branches of the same test are exercising different features, split them. If they're exercising different beats of the same feature, keep them together.

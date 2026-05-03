@@ -47,6 +47,30 @@ expect(screen.getByText('open')).toBeInTheDocument();
 expect(wrapper.instance().state.phase).toBe('open');
 ```
 
+## Query as the User Perceives
+
+`strength: strong` · [rationale](./testing.why.md#query-as-the-user-perceives)
+
+- Query and assert on what a user can see, hear, or interact with — not on DOM structure or internal markers.
+- Follow [Testing Library's query priority](https://testing-library.com/docs/queries/about#priority): `*ByRole` (with accessible `name`) → `*ByLabelText` → `*ByPlaceholderText` → `*ByText` → `*ByDisplayValue` → `*ByAltText` → `*ByTitle` → `*ByTestId`. Pick the highest-priority query the element supports.
+- `*ByTestId` is an escape hatch for elements with no accessible role, label, or text. Frequent reach for it is a markup smell, not a test problem.
+- Pick the variant by assertion intent: `getBy*` for presence (throws on miss), `queryBy*` for absence (returns `null`), `findBy*` for async appearance (returns a promise).
+- Drive interactions with `userEvent`, not `fireEvent`. `userEvent` simulates the full event sequence a real user produces; `fireEvent` dispatches a single synthetic event and bypasses things like `disabled` and focus management.
+
+```tsx
+// good — role + accessible name, userEvent, findBy for async, queryBy for absence
+const user = userEvent.setup();
+render(<FlowerForm />);
+await user.type(screen.getByLabelText(/flower name/i), 'tulip');
+await user.click(screen.getByRole('button', { name: /save/i }));
+expect(await screen.findByRole('status')).toHaveTextContent(/saved/i);
+expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+// avoid — testid for elements with real roles; fireEvent; getBy for absence
+fireEvent.click(screen.getByTestId('save-btn'));
+expect(screen.getByTestId('error')).not.toBeInTheDocument(); // throws before the matcher runs
+```
+
 ## Mock at the Furthest Reasonable Boundary
 
 `strength: strong` · [rationale](./testing.why.md#mock-at-the-furthest-reasonable-boundary)
