@@ -8,8 +8,6 @@ Expanded rationale for opinionated rules in [testing.md](./testing.md). Section 
 
 **Rule:** Lean toward integration tests; unit-test pure logic; use e2e sparingly.
 
-**Strength:** strong
-
 Adapted from [Kent C. Dodds, _The Testing Trophy_](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications) and [_Write tests. Not too many. Mostly integration._](https://kentcdodds.com/blog/write-tests).
 
 ### Integration tests give the best confidence-per-effort
@@ -41,8 +39,6 @@ Types rule out entire classes of bugs before a test runs — wrong shapes, missi
 
 **Rule:** Don't chase a coverage percentage. Use coverage to find untested paths.
 
-**Strength:** strong
-
 Adapted from [Martin Fowler, _Test Coverage_](https://martinfowler.com/bliki/TestCoverage.html).
 
 ### Coverage is a lagging indicator
@@ -65,8 +61,6 @@ Set a coverage target and you get tests that hit coverage — tests that exercis
 
 **Rule:** Assert what callers see. Don't assert on internal state.
 
-**Strength:** strong
-
 ### Implementation tests break on every refactor
 
 A test that reaches into component state, private methods, or specific function calls will break the moment you refactor the internals — even if the behavior is identical. That's not a good test; that's a tripwire that fires on any structural change.
@@ -84,8 +78,6 @@ Ask: "if I refactor this to a different implementation that does the same thing,
 ## Mock at the Furthest Reasonable Boundary
 
 **Rule:** Mock as far toward the edge of your code as you reasonably can.
-
-**Strength:** strong
 
 Adapted from [Kent C. Dodds, _Stop Mocking Fetch_](https://kentcdodds.com/blog/stop-mocking-fetch).
 
@@ -114,8 +106,6 @@ Some third-party SDKs don't expose a clean network boundary — they wrap HTTP i
 
 **Rule:** Prefer flat `test` blocks. Minimize `describe` depth.
 
-**Strength:** strong
-
 Adapted from [Kent C. Dodds, _Avoid Nesting When You're Testing_](https://kentcdodds.com/blog/avoid-nesting-when-youre-testing).
 
 ### Nested `describe`s hide state
@@ -131,8 +121,6 @@ Each `test` contains (or explicitly calls) its own setup. Drop into any test and
 ## Setup Functions
 
 **Rule:** Start inline; extract a setup function when inlining gets repetitive. Reserve `beforeEach` for fixture isolation.
-
-**Strength:** strong
 
 ### `beforeEach` hides dependencies
 
@@ -157,8 +145,6 @@ For _teardown_ and _fixture reset_: clearing mocks, closing connections, resetti
 ## Test Structure
 
 **Rule:** AAA (arrange, act, assert) is the default shape. Prefer fewer, longer tests over many tiny ones.
-
-**Strength:** strong
 
 Adapted from [Kent C. Dodds, _Write Fewer, Longer Tests_](https://kentcdodds.com/blog/write-fewer-longer-tests).
 

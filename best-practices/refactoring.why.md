@@ -8,8 +8,6 @@ Expanded rationale for opinionated rules in [refactoring.md](./refactoring.md). 
 
 **Rule:** Refactoring happens in distinct rhythms, each suited to a different moment.
 
-**Strength:** strong
-
 Adapted from [Martin Fowler, _Workflows of Refactoring_](https://martinfowler.com/articles/workflowsOfRefactoring/).
 
 ### Refactoring is maintenance, not an event
@@ -33,8 +31,6 @@ Needing scheduled, carved-out time for refactoring usually means the other rhyth
 ## Leave the Code Better Than You Found It
 
 **Rule:** Improve code opportunistically (the campsite rule), balanced against review cost and coordination cost in large codebases.
-
-**Strength:** strong
 
 ### The campsite rule compounds
 

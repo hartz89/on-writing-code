@@ -8,7 +8,8 @@ Applies to every rule across this repo — style guides and best practices alike
 
 - **non-negotiable** — hard rule. Violation requires a local comment explaining why.
 - **strong** — default with rare exceptions. Deviation should be defensible on review.
-- **weak** — preference for consistency. Either choice is defensible in isolation; pick one and stick with it.
+- **moderate** — good default, but legitimate alternatives exist. Deviation doesn't require justification, just intent.
+- **trivial** — preference for consistency. Either choice is defensible in isolation; pick one and stick with it.
 
 See [typescript.md](./typescript.md) for the canonical example of these tags in use.
 

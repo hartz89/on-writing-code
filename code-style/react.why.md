@@ -1,14 +1,12 @@
 # React — Rationale
 
-Expanded rationale for opinionated rules in [react.md](./react.md). Section names mirror the rules file. Strength levels are defined in [\_index.md](./_index.md).
+Expanded rationale for opinionated rules in [react.md](./react.md). Section names mirror the rules file.
 
 ---
 
 ## Memoization
 
 **Rule:** With the React Compiler, skip manual memoization. Without it, use `memo` / `useCallback` / `useMemo` sparingly — only when there's a measurable reason.
-
-**Strength:** strong
 
 ### Manual memoization is easy to get wrong
 
@@ -40,8 +38,6 @@ When enabled, the Compiler auto-memoizes components, values, and handlers. Manua
 
 **Rule:** Props are `on*`; local handlers are `handle*`. Canonical shape: `onClick={handleClick}`.
 
-**Strength:** strong
-
 Codified in the React docs, [Responding to Events](https://react.dev/learn/responding-to-events): event-handler props start with `on`, handler functions start with `handle`. Following the convention is free; re-litigating it on every PR isn't.
 
 The two names do different jobs. `onClick` is the event (what the component accepts); `handleClick` is the response (what this component does). Collapsing them to `onClick={onClick}` loses that distinction and reads as a tautology.
@@ -53,8 +49,6 @@ When a specific verb fits the action better than `handle*` — `onIncrementClick
 ## JSX Colocation
 
 **Rule:** Keep JSX in the component's return statement. Extract real sub-components, not `render*` helpers.
-
-**Strength:** strong
 
 ### JSX scattered across a file is a shape problem, not a style problem
 

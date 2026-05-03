@@ -17,13 +17,14 @@ Each section below is tagged with one of:
 
 - **non-negotiable** — hard rule. Violating requires a local comment explaining why.
 - **strong** — default with rare exceptions. Deviation should be defensible on review.
-- **weak** — preference for consistency. Either choice is defensible in isolation; pick one and stick with it.
+- **moderate** — good default, but legitimate alternatives exist. Deviation doesn't require justification, just intent.
+- **trivial** — preference for consistency. Either choice is defensible in isolation; pick one and stick with it.
 
 ---
 
 ## Naming
 
-`strength: strong`
+`strength: moderate`
 
 - PascalCase for types, type aliases, and interfaces.
 - camelCase for values, functions, variables.
@@ -48,7 +49,7 @@ const isBlooming = (flower: Flower) => flower.phase === 'open';
 
 ## Types vs. Interfaces
 
-`strength: weak` · [rationale](./typescript.why.md#types-vs-interfaces)
+`strength: moderate` · [rationale](./typescript.why.md#types-vs-interfaces)
 
 - Default to `type` for all shapes, unions, and aliases.
 - Use `interface` only for intentional declaration merging or public APIs designed for `extends`.
@@ -194,7 +195,7 @@ if (isRose(flower)) {
 
 ## Utility Types
 
-`strength: weak`
+`strength: trivial`
 
 - Use built-ins (`Pick`, `Omit`, `Partial`, `Required`, `ReturnType`, `Parameters`) over redefining shapes.
 - If a derived type obscures intent, spell the shape out.
@@ -334,7 +335,7 @@ if (flower.phase === 'seed') {
 
 ## Iteration
 
-`strength: strong`
+`strength: moderate`
 
 - Prefer array methods (`map`, `filter`, `reduce`, `forEach`, `find`, `some`, `every`) for straightforward transformations and traversals.
 - Reach for an explicit `for` / `for...of` loop when you need fine-grained flow control: early exit (`break`), selective skipping based on coordinated state, or async sequencing where parallelism isn't safe.
@@ -353,7 +354,7 @@ for (const flower of flowers) {
 
 ## Comments
 
-`strength: strong`
+`strength: moderate`
 
 - Code says _what_; comments say _why_.
 - Skip the comment if the why is obvious from naming and structure.

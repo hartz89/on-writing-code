@@ -2,7 +2,7 @@
 
 > Test for the confidence the tests give you — not for a coverage number. The Testing Trophy (static + integration) tends to give the best return on effort.
 
-Rationale for the opinionated sections lives in [testing.why.md](./testing.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [../code-style/\_index.md](../code-style/_index.md).
+Rationale for the opinionated sections lives in [testing.why.md](./testing.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [../code-style/\_index.md](../code-style/_index.md).
 
 ## Guiding Principles
 
@@ -97,7 +97,7 @@ test('advances from open to seed', () => {
 
 ## Naming
 
-`strength: strong`
+`strength: moderate`
 
 - Prefer `test()` over `it()`. The `it()` form forces a grammatical frame ("it does X"); `test()` lets you describe what's under test without twisting syntax.
 - Describe behavior and condition, not function or variable names.

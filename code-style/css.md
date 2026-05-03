@@ -2,7 +2,7 @@
 
 General styling rules that apply regardless of the authoring tool (vanilla CSS, CSS Modules, Vanilla Extract, styled-components, Tailwind, etc.). Tool-specific rules live alongside the tool — see [vanilla-extract-css.md](./vanilla-extract-css.md).
 
-Rationale for the opinionated sections lives in [css.why.md](./css.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [\_index.md](./_index.md).
+Rationale for the opinionated sections lives in [css.why.md](./css.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [\_index.md](./_index.md).
 
 ## Guiding Principles
 
@@ -101,7 +101,7 @@ Rationale for the opinionated sections lives in [css.why.md](./css.why.md). Stre
 
 ## Semantic Class Names
 
-`strength: strong`
+`strength: moderate`
 
 - Name classes for what the element _is_ or _does_: `card`, `primary-action`, `error-message`. Not `blue-box`, `padded-div`, `mt-4`.
 - Utility classes (Tailwind-style) are the deliberate exception.

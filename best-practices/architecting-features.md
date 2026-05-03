@@ -1,6 +1,6 @@
 # Architecting Features
 
-Rationale for the opinionated sections lives in [architecting-features.why.md](./architecting-features.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [../code-style/\_index.md](../code-style/_index.md).
+Rationale for the opinionated sections lives in [architecting-features.why.md](./architecting-features.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [../code-style/\_index.md](../code-style/_index.md).
 
 ## Prove the Pipeline Early
 

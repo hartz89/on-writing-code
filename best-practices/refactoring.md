@@ -2,7 +2,7 @@
 
 > Refactoring is rhythm, not an event — it's how you keep the cost of understanding from compounding.
 
-Rationale for the opinionated sections lives in [refactoring.why.md](./refactoring.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [../code-style/\_index.md](../code-style/_index.md).
+Rationale for the opinionated sections lives in [refactoring.why.md](./refactoring.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [../code-style/\_index.md](../code-style/_index.md).
 
 ## Guiding Principles
 

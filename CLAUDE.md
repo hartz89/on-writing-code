@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Notes for agentic sessions working in this repo. See [README.md](./README.md) for the human-facing overview.
+Notes for agentic sessions working in this repo. For the task-to-file index, see [\_index.md](./_index.md). For the human-facing overview, see [README.md](./README.md).
 
 ## What this repo is
 
@@ -16,7 +16,8 @@ Code _formatting_ (indentation, quotes, semicolons, trailing commas) is delibera
 ## Structure
 
 ```
-README.md                        # repo overview
+README.md                        # human-facing repo overview
+_index.md                        # LLM entrypoint: task-to-file index
 code-gardening.md                # human-facing manifesto (not part of the LLM reading path)
 philosophy.md                    # language-agnostic principles
 inspiration.md                   # attribution / further reading
@@ -46,7 +47,8 @@ Every rule section is tagged with one of:
 
 - `non-negotiable` — hard rule. Violating requires a local justifying comment.
 - `strong` — default with rare exceptions. Deviation defensible on review.
-- `weak` — consistency preference. Either choice is defensible; pick one.
+- `moderate` — good default, but legitimate alternatives exist. Deviation doesn't require justification, just intent.
+- `trivial` — consistency preference. Either choice is defensible; pick one.
 
 Canonical definitions: [code-style/\_index.md](./code-style/_index.md). Canonical example: [code-style/typescript.md](./code-style/typescript.md).
 
@@ -68,7 +70,6 @@ That's it. If you find yourself writing "because…", "the argument is…", "thi
 **`.why` file (`<lang>.why.md`):**
 
 - The rule restated in one sentence.
-- The strength.
 - The reasoning — history, tradeoffs, counter-arguments, examples of what goes wrong without the rule. Paragraphs are fine here.
 
 ### When rationale is worth writing

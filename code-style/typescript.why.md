@@ -1,14 +1,12 @@
 # TypeScript — Rationale
 
-Expanded rationale for opinionated rules in [typescript.md](./typescript.md). Sections here are named to match their counterparts there. Strength levels (`non-negotiable` / `strong` / `weak`) are defined in the rules file.
+Expanded rationale for opinionated rules in [typescript.md](./typescript.md). Sections here are named to match their counterparts there.
 
 ---
 
 ## Types vs. Interfaces
 
 **Rule:** Default to `type`. Use `interface` only for declaration merging or public APIs designed for `extends`.
-
-**Strength:** weak — both work fine for most object shapes. The preference is about defaults, not dogma.
 
 ### `type` is a strict superset of `interface` for shapes
 
@@ -57,8 +55,6 @@ The [TypeScript handbook](https://www.typescriptlang.org/docs/handbook/2/everyda
 
 **Rule:** Prefer `const`, `readonly`, and `as const`. Don't mutate arguments or shared state.
 
-**Strength:** strong
-
 ### Mutation forces non-local reasoning
 
 When a value can change, understanding any piece of code requires tracking every place it might be modified. Immutable data collapses that to "what is this value right now?" — you can read top-to-bottom without scanning for mutations.
@@ -87,8 +83,6 @@ Async code, Strict Mode double-rendering, Suspense retries, and future concurren
 
 **Rule:** Model variants with string-literal unions; discriminate with `kind` or `type`; switch on the discriminant.
 
-**Strength:** strong
-
 ### The compiler becomes your exhaustiveness checker
 
 When you switch on the discriminant, TypeScript narrows each case to the specific variant. Every property access inside a branch is type-safe without guards or casts.
@@ -111,8 +105,6 @@ Structural tests (`'thorns' in flower`) work but don't scale — every new prope
 
 **Rule:** Never use `any` without a justifying comment. Use `unknown` for truly unknown values; narrow before use.
 
-**Strength:** non-negotiable
-
 ### `any` is viral
 
 `any` doesn't stay where you put it. Every operation on an `any` value returns `any`. Pass it to a function, and the return type collapses to `any`. Destructure it, and every field is `any`. A single `any` at a data boundary can propagate through an entire codebase without the compiler complaining once.
@@ -130,8 +122,6 @@ Structural tests (`'thorns' in flower`) work but don't scale — every new prope
 ## Avoid `as` Casting
 
 **Rule:** Treat `as X` as a last resort. Prefer narrowing, type guards, or schema validation.
-
-**Strength:** strong
 
 ### `as` silences the compiler without proving anything
 
@@ -155,8 +145,6 @@ Everything else — casting to silence an error, casting "because I know better,
 
 **Rule:** Enable `strict: true`. Don't disable individual strictness flags without justification.
 
-**Strength:** non-negotiable
-
 ### Null-pointer errors are the most common avoidable bug
 
 `strictNullChecks` alone catches the largest class of runtime bugs TypeScript can prevent. Without it, every value that's actually `T | null | undefined` is typed as `T`, and the compiler lets you dereference it freely. You'll hit `Cannot read property of undefined` in production that a single tsconfig flag would have caught at compile time.
@@ -174,8 +162,6 @@ Test files lean heavily on partials (`{ name: 'test' } as User`) and mocks that 
 ## Function Signatures
 
 **Rule:** Default to arrows; use `function` when hoisting helps; choose positional vs options by the function's shape.
-
-**Strength:** strong
 
 ### Arrow functions are the consistent default
 
@@ -199,8 +185,6 @@ Over-using positional arguments on complex signatures makes call sites brittle a
 
 **Rule:** Keep code flat; extract helpers for complex conditional logic; reach for IIFEs when an expression needs statements.
 
-**Strength:** strong
-
 ### Nesting is the best predictor of hard-to-change code
 
 Cyclomatic complexity, cognitive complexity, "how long does it take to understand this function" — they all correlate with indentation depth. Every level of nesting is another piece of state the reader has to carry ("we're in the branch where `x` is true, and also the branch where `y` is defined, and inside the loop over `z`..."). Flat code is scannable; deeply nested code has to be simulated line-by-line.
@@ -220,8 +204,6 @@ An IIFE — `const x = ((): T => { ... })()` — keeps the binding `const`, keep
 ## Enums
 
 **Rule:** Prefer string-literal unions or `as const` objects. Don't use `enum`.
-
-**Strength:** strong
 
 ### `enum` emits runtime code
 
@@ -250,8 +232,6 @@ The only thing `enum` adds is namespacing (`Phase.Bud`), and `as const` objects 
 ## Null vs. Undefined
 
 **Rule:** Use `undefined` for "absent." Reserve `null` for explicit "intentionally empty" or external APIs that require it.
-
-**Strength:** strong
 
 ### JavaScript gave you two and the language treats them differently
 

@@ -2,7 +2,7 @@
 
 > Same principles as [typescript.md](./typescript.md): the simplest thing that works, clear over clever, small units.
 
-Rationale for the opinionated sections lives in [react.why.md](./react.why.md). Strength levels (`non-negotiable` / `strong` / `weak`) are defined in [\_index.md](./_index.md).
+Rationale for the opinionated sections lives in [react.why.md](./react.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [\_index.md](./_index.md).
 
 ## Component Structure
 
@@ -77,7 +77,7 @@ export const FlowerBed: FC<FlowerBedProps> = ({ initialPhase = 'bud' }) => {
 
 ## Hook Order
 
-`strength: weak`
+`strength: trivial`
 
 Declare hooks at the top of the component body, in this order:
 
@@ -139,7 +139,7 @@ Petal.displayName = 'Petal';
 
 ## Conditional Rendering
 
-`strength: strong`
+`strength: moderate`
 
 - `&&` for simple presence.
 - Ternary for if/else.

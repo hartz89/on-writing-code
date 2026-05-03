@@ -8,8 +8,6 @@ Expanded rationale for opinionated rules in [architecting-features.md](./archite
 
 **Rule:** Build a thin end-to-end slice first before filling out any layer in full.
 
-**Strength:** strong
-
 Adapted from [_The Pragmatic Programmer_, Hunt & Thomas](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/) — "Tracer Bullets" chapter.
 
 ### The integration tax is cheapest early

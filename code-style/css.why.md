@@ -1,14 +1,12 @@
 # CSS — Rationale
 
-Expanded rationale for opinionated rules in [css.md](./css.md). Section names mirror the rules file. Strength levels are defined in [\_index.md](./_index.md).
+Expanded rationale for opinionated rules in [css.md](./css.md). Section names mirror the rules file.
 
 ---
 
 ## Logical Properties
 
 **Rule:** Prefer `inline-*` / `block-*` logical properties over physical `left` / `right` / `top` / `bottom`.
-
-**Strength:** strong
 
 ### Physical directions bake in English-language assumptions
 
@@ -36,8 +34,6 @@ Use physical deliberately in those cases. Use logical everywhere else.
 
 **Rule:** Use `rem` for type and typographic spacing; `px` for hairlines and pixel-precise details.
 
-**Strength:** strong
-
 ### `px` silently overrides user preferences
 
 Every major browser lets the user set a base font size (for accessibility, vision, or personal preference). `font-size: 16px` ignores that setting entirely; `font-size: 1rem` respects it. Spacing tied to typography (padding inside a text container, line-relative margins) should scale the same way — a button with `padding: 12px 16px` gets cramped when the user bumps their base size up, while `padding: 0.75rem 1rem` stays balanced.
@@ -55,8 +51,6 @@ Hairline borders, icon dimensions, and design-token details where sub-pixel rend
 ## Avoid `!important`
 
 **Rule:** Treat `!important` as a signal of broken cascade, not a tool for winning it.
-
-**Strength:** strong
 
 ### `!important` is the nuclear option — using it once pressures everything else
 
@@ -77,8 +71,6 @@ If you need `.foo { color: red !important }` to beat something, the "something" 
 ## Respect User Preferences
 
 **Rule:** Honor `prefers-reduced-motion`, `prefers-color-scheme`, and `forced-colors`.
-
-**Strength:** strong
 
 ### Accessibility is a feature, not a polish pass
 
@@ -104,8 +96,6 @@ Test with Windows High Contrast or DevTools emulation before shipping anything v
 
 **Rule:** Define design tokens as CSS custom properties; consume tokens in components.
 
-**Strength:** strong
-
 ### Custom properties are the universal theming primitive
 
 Every tool — Vanilla Extract, Tailwind, CSS Modules, styled-components — either emits custom properties directly or composes cleanly with them. Building on custom properties means dark mode, density variants, and white-label themes all reduce to swapping a `:root` block, independent of what the components are authored in.
@@ -119,8 +109,6 @@ A design system has maybe twenty meaningful colors and a dozen spacing steps. Wh
 ## Keep Specificity Flat
 
 **Rule:** Target a single class per rule by default. Don't chain selectors for no reason.
-
-**Strength:** strong
 
 ### Specificity is a debt that compounds
 

@@ -1,14 +1,12 @@
 # Vanilla Extract — Rationale
 
-Expanded rationale for opinionated rules in [vanilla-extract-css.md](./vanilla-extract-css.md). Section names mirror the rules file. Strength levels are defined in [\_index.md](./_index.md).
+Expanded rationale for opinionated rules in [vanilla-extract-css.md](./vanilla-extract-css.md). Section names mirror the rules file.
 
 ---
 
 ## Style Array Ordering
 
 **Rule:** In `style([...])`, order entries by increasing specificity: atomic utilities, then component base, then overrides and selectors.
-
-**Strength:** strong
 
 ### `style([])` concatenates classes; the cascade decides the winner
 
@@ -27,8 +25,6 @@ Putting overrides first doesn't "just work" — the atomic utilities declared la
 ## `styleVariants` vs `recipe`
 
 **Rule:** Reach for `recipe` only when you have multiple independent axes or compound variants.
-
-**Strength:** strong
 
 ### `styleVariants` is cheaper to read
 
