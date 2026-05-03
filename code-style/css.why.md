@@ -2,6 +2,14 @@
 
 Expanded rationale for opinionated rules in [css.md](./css.md). Section names mirror the rules file.
 
+## Guiding principles
+
+The rules below all flow from these:
+
+- Respect user intent: locale, reduced motion, color scheme, forced colors, font-size preferences.
+- Prefer native CSS (custom properties, modern layout, logical properties, container queries) over tool-specific workarounds.
+- Keep specificity flat.
+
 ---
 
 ## Logical Properties

@@ -1,14 +1,8 @@
 # CSS
 
-General styling rules that apply regardless of the authoring tool (vanilla CSS, CSS Modules, Vanilla Extract, styled-components, Tailwind, etc.). Tool-specific rules live alongside the tool — see [vanilla-extract-css.md](./vanilla-extract-css.md).
+Tool-agnostic rules (vanilla CSS, CSS Modules, Vanilla Extract, styled-components, Tailwind, etc.). Tool-specific rules live alongside the tool — see [vanilla-extract-css.md](./vanilla-extract-css.md).
 
-Rationale for the opinionated sections lives in [css.why.md](./css.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [\_index.md](./_index.md).
-
-## Guiding Principles
-
-- Respect user intent: locale, reduced motion, color scheme, forced colors, font-size preferences.
-- Prefer native CSS (custom properties, modern layout, logical properties, container queries) over tool-specific workarounds.
-- Keep specificity flat.
+Rationale: [css.why.md](./css.why.md). Strength levels: [\_index.md](./_index.md).
 
 ## Logical Properties
 

@@ -1,15 +1,6 @@
 # Testing
 
-> Test for the confidence the tests give you — not for a coverage number. The Testing Trophy (static + integration) tends to give the best return on effort.
-
-Rationale for the opinionated sections lives in [testing.why.md](./testing.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [../code-style/\_index.md](../code-style/_index.md).
-
-## Guiding Principles
-
-- Static typing is your first layer of testing. Don't duplicate what the compiler already proves.
-- Prefer integration tests. Unit-test pure logic; use e2e sparingly.
-- Test the behavior the caller sees; don't assert on implementation details.
-- Tests are code. Same naming, same small-units, same readability rules.
+Rationale: [testing.why.md](./testing.why.md). Strength levels: [../code-style/\_index.md](../code-style/_index.md).
 
 ## Testing Trophy
 

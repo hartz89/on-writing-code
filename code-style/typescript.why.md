@@ -2,6 +2,15 @@
 
 Expanded rationale for opinionated rules in [typescript.md](./typescript.md). Sections here are named to match their counterparts there.
 
+## Guiding principles
+
+Inspired by _Clean Code_ (meaningful names, small units, single responsibility) and Kent C. Dodds (prefer the simplest thing that works; don't solve problems you don't have). The rules below all flow from these:
+
+- Types serve clarity, not cleverness. If a type takes more effort to read than the code it describes, simplify.
+- Annotate the outside, infer the inside. Annotate at module boundaries; let inference handle locals.
+- Prefer the simplest type that works. Unions and `as const` before generics; generics before conditionals; conditionals before mapped types.
+- Make illegal states unrepresentable. Model data so invalid combinations can't be constructed.
+
 ---
 
 ## Types vs. Interfaces

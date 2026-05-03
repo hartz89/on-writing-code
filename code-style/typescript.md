@@ -1,26 +1,6 @@
 # TypeScript
 
-> Inspired by _Clean Code_ (meaningful names, small units, single responsibility) and Kent C. Dodds (prefer the simplest thing that works; don't solve problems you don't have).
-
-Rationale for the opinionated sections lives in [typescript.why.md](./typescript.why.md).
-
-## Guiding Principles
-
-- Types serve clarity, not cleverness. If a type takes more effort to read than the code it describes, simplify.
-- Annotate the outside, infer the inside. Annotate at module boundaries; let inference handle locals.
-- Prefer the simplest type that works. Unions and `as const` before generics; generics before conditionals; conditionals before mapped types.
-- Make illegal states unrepresentable. Model data so invalid combinations can't be constructed.
-
-## Strength Levels
-
-Each section below is tagged with one of:
-
-- **non-negotiable** — hard rule. Violating requires a local comment explaining why.
-- **strong** — default with rare exceptions. Deviation should be defensible on review.
-- **moderate** — good default, but legitimate alternatives exist. Deviation doesn't require justification, just intent.
-- **trivial** — preference for consistency. Either choice is defensible in isolation; pick one and stick with it.
-
----
+Rationale: [typescript.why.md](./typescript.why.md). Strength levels: [\_index.md](./_index.md).
 
 ## Naming
 

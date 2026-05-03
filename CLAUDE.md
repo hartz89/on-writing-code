@@ -43,14 +43,7 @@ best-practices/
 
 ## Strength levels
 
-Every rule section is tagged with one of:
-
-- `non-negotiable` — hard rule. Violating requires a local justifying comment.
-- `strong` — default with rare exceptions. Deviation defensible on review.
-- `moderate` — good default, but legitimate alternatives exist. Deviation doesn't require justification, just intent.
-- `trivial` — consistency preference. Either choice is defensible; pick one.
-
-Canonical definitions: [code-style/\_index.md](./code-style/_index.md). Canonical example: [code-style/typescript.md](./code-style/typescript.md).
+Every rule section is tagged `non-negotiable` / `strong` / `moderate` / `trivial`. Canonical definitions: [code-style/\_index.md](./code-style/_index.md). Canonical example: [code-style/typescript.md](./code-style/typescript.md).
 
 ## The rule / rationale split
 

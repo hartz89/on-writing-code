@@ -2,6 +2,15 @@
 
 Expanded rationale for opinionated rules in [testing.md](./testing.md). Section names mirror the rules file.
 
+## Guiding principles
+
+Test for the confidence the tests give you — not for a coverage number. The Testing Trophy (static + integration) tends to give the best return on effort. The rules below all flow from these:
+
+- Static typing is your first layer of testing. Don't duplicate what the compiler already proves.
+- Prefer integration tests. Unit-test pure logic; use e2e sparingly.
+- Test the behavior the caller sees; don't assert on implementation details.
+- Tests are code. Same naming, same small-units, same readability rules.
+
 ---
 
 ## Testing Trophy

@@ -1,8 +1,6 @@
 # React
 
-> Same principles as [typescript.md](./typescript.md): the simplest thing that works, clear over clever, small units.
-
-Rationale for the opinionated sections lives in [react.why.md](./react.why.md). Strength levels (`non-negotiable` / `strong` / `moderate` / `trivial`) are defined in [\_index.md](./_index.md).
+Rationale: [react.why.md](./react.why.md). Strength levels: [\_index.md](./_index.md). Same guiding principles as [typescript.md](./typescript.md).
 
 ## Component Structure
 

@@ -2,6 +2,15 @@
 
 Expanded rationale for opinionated rules in [refactoring.md](./refactoring.md). Section names mirror the rules file.
 
+## Guiding principles
+
+Refactoring is rhythm, not an event — it's how you keep the cost of understanding from compounding. The rules below all flow from these:
+
+- Refactoring is woven into normal work, not carved out of it.
+- Make the change easy, then make the easy change.
+- A refactor preserves observable behavior. If behavior changes, it's a feature change, not a refactor.
+- Separate refactor commits from behavior commits so reviewers (and `git bisect`) can reason about each.
+
 ---
 
 ## Workflows of Refactoring
